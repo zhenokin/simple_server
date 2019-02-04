@@ -1,16 +1,18 @@
 'use strict';
 
-module.exports = {
-    1: {
-        title: '1',
-        description: '111111'
-    },
-    2: {
-        title: '2',
-        description: '222222'
-    },
-    3: {
-        title: '3',
-        description: '333333'
-    }
-};
+const mongoose = require('mongoose');
+
+const dbnName = 'News';
+const url = 'mongodb://localhost:27017';
+
+mongoose.connect(`${url}/${dbnName}`, { useNewUrlParser: true });
+
+const newsSchema = new mongoose.Schema({
+    id: Number,
+    title: String,
+    description: String
+});
+
+const News = mongoose.model('News', newsSchema);
+
+module.exports = News;
