@@ -8,10 +8,11 @@ const url = 'mongodb://localhost:27017';
 mongoose.connect(`${url}/${dbnName}`, { useNewUrlParser: true });
 
 const usersSchema = new mongoose.Schema({
-  id: Number,
-  name: String,
-  pass: String,
-  isAdmin: Boolean
+	id: Number,
+	name: String,
+	pass: String,
+	imageUrl: String,
+	isAdmin: Boolean
 });
 
 const Users = mongoose.model('Users', usersSchema);

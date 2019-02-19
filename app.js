@@ -14,6 +14,7 @@ const { getActiveUser } = require('./users/Users.Helpers');
 var app = express();
 app.use(cors());
 app.options('*', cors());
+app.use(require('body-parser').json());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
