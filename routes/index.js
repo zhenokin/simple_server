@@ -36,7 +36,6 @@ router.get('/logOut', (req, res) => {
 });
 
 router.get('/getActiveUser', (req, res) => {
-	console.log('HERE-1');
 	res.send(JSON.stringify(req.body.activeUser));
 });
 router.post('/aut', (req, res, next) => {
@@ -55,7 +54,7 @@ router.post('/aut', (req, res, next) => {
 						status: 'done',
 						userInfo: { name: user.name, imageUrl: user.imageUrl, id: user.id }
 					})
-				);
+				).end();
 			} else {
 				Users.find({ name }, (err, users) => {
 					if (err) return console.error(err);
@@ -67,7 +66,7 @@ router.post('/aut', (req, res, next) => {
 							})
 						);
 					} else {
-						res.send(400).send(
+						res.status(400).send(
 							JSON.stringify({
 								status: 'failed',
 								text: "There isn'n such user"
@@ -139,27 +138,34 @@ router.get('/news/:id', (req, res) => {
 });
 
 router.post('/news', (req, res) => {
-	if (canActiveUserEditNews()) {
-		const { title = '', description = '', id = generateId() } = req.body;
-		const newNews = new News({ id, title, description });
+	// if (canActiveUserEditNews()) {
+	// 	const { title = '', description = '', id = generateId() } = req.body;
+	// 	const newNews = new News({ id, title, description });
 
-		newNews.save(err => {
-			if (err) return console.error(err);
-			res.send('done');
-		});
-	} else {
-		res.send("U cann't edit news");
-	}
+	// 	newNews.save(err => {
+	// 		if (err) return console.error(err);
+	// 		res.send('done');
+	// 	});
+	// } else {
+	// 	res.send("U cann't edit news");
+	// }
+	const news = req.body;
+	const { id } = news;
+	News.findOneAndUpdate({ id }, news, err => {
+		if (err) return console.error(err);
+		res.send(JSON.stringify({ done: true }));
+	});
 });
 
-router.put('/news/:id', (req, res) => {
-	const { title = '', description = '' } = req.body;
-	const { id } = req.params;
-	const newNews = new News({ id, title, description });
+router.put('/news', (req, res) => {
+	const info = req.body;
+	info.id = generateId();
+	info.isLocalNews = true;
+	const newNews = new News(info);
 
 	newNews.save(err => {
 		if (err) return console.error(err);
-		res.send('done');
+		res.send(JSON.stringify({ done: true }));
 	});
 });
 
