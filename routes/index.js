@@ -174,7 +174,7 @@ router.delete('/news/:id', (req, res) => {
 		const id = req.params.id;
 		News.findOneAndRemove({ id: id }, err => {
 			if (err) return console.error(err);
-			res.send('done');
+			res.send(JSON.stringify({ done: true }));
 		});
 	} else {
 		res.send("U can'n delete news");
